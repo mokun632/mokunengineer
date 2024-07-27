@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { cn } from "@/lib/utils";
 
 const ArticleCard = ({
   title,
@@ -33,66 +34,67 @@ const ArticleCard = ({
 );
 
 const CategoryList = () => (
-  <Card className="border-none shadow-none">
-    <CardHeader className="pt-0">
-      <CardTitle>Categories</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="grid gap-2">
-        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-          Web Development
-        </Link>
-        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-          React
-        </Link>
-        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-          Serverless
-        </Link>
-        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-          Performance
-        </Link>
-        <Link href="#" className="text-sm hover:underline" prefetch={false}>
-          Accessibility
-        </Link>
-      </div>
-    </CardContent>
-  </Card>
+  <div>
+    <div className={cn("flex flex-col space-y-1.5 p-6", "pt-0")}>
+      <h3 className="text-2xl font-semibold leading-none tracking-tight">
+        Categories
+      </h3>
+    </div>
+    <div className="grid gap-2 p-6 pt-0">
+      <Link href="#" className="text-sm hover:underline" prefetch={false}>
+        Web Development
+      </Link>
+      <Link href="#" className="text-sm hover:underline" prefetch={false}>
+        React
+      </Link>
+      <Link href="#" className="text-sm hover:underline" prefetch={false}>
+        Serverless
+      </Link>
+      <Link href="#" className="text-sm hover:underline" prefetch={false}>
+        Performance
+      </Link>
+      <Link href="#" className="text-sm hover:underline" prefetch={false}>
+        Accessibility
+      </Link>
+    </div>
+  </div>
 );
 
 const PopularPostList = () => (
-  <Card className="border-none shadow-none">
-    <CardHeader className="pt-0">
-      <CardTitle>Popular Posts</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <div className="grid gap-4">
-        <Link
-          href="#"
-          className="flex items-center gap-2 text-sm hover:underline"
-          prefetch={false}
-        >
-          <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
-          <div>The Future of Web Development</div>
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-2 text-sm hover:underline"
-          prefetch={false}
-        >
-          <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
-          <div>Mastering React Hooks</div>
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-2 text-sm hover:underline"
-          prefetch={false}
-        >
-          <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
-          <div>The Rise of Serverless Computing</div>
-        </Link>
-      </div>
-    </CardContent>
-  </Card>
+  <div>
+    <div className={cn("flex flex-col space-y-1.5 p-6", "pt-0")}>
+      <h3 className="text-2xl font-semibold leading-none tracking-tight">
+        Popular Posts
+      </h3>
+    </div>
+
+    <div className="grid gap-2 p-6 pt-0">
+      <Link
+        href="#"
+        className="flex items-center gap-2 text-sm hover:underline"
+        prefetch={false}
+      >
+        <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
+        <div>The Future of Web Development</div>
+      </Link>
+      <Link
+        href="#"
+        className="flex items-center gap-2 text-sm hover:underline"
+        prefetch={false}
+      >
+        <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
+        <div>Mastering React Hooks</div>
+      </Link>
+      <Link
+        href="#"
+        className="flex items-center gap-2 text-sm hover:underline"
+        prefetch={false}
+      >
+        <div className="flex-shrink-0 w-16 h-12 bg-muted rounded-md" />
+        <div>The Rise of Serverless Computing</div>
+      </Link>
+    </div>
+  </div>
 );
 
 export default function Page() {
