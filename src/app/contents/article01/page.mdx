@@ -1,0 +1,23 @@
+# MDX
+
+## シンタックスハイライト
+
+コードブロックにシンタックスハイライトで色をつけれます!
+
+実際はバッククォートですが、文章に記載することができないため全角のバッククォートで記載しています。
+コピペする場合は、半角のバッククォートに変換してください。
+
+```tsx {4} showLineNumbers
+import { useFloating } from "@floating-ui/react";
+
+function MyComponent() {
+  const { refs, floatingStyles } = useFloating();
+
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles} />
+    </>
+  );
+}
+```
