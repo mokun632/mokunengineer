@@ -99,47 +99,43 @@ const PopularPostList = () => (
 
 export default function Page() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-10 p-4 md:p-8">
-        <div className="space-y-8">
-          {[
-            {
-              title: "The Future of Web Development",
-              author: "John Doe",
-              date: "April 15, 2023",
-              content:
-                "In this article, we explore the latest trends and technologies shaping the future of web development. From the rise of serverless architectures to the increasing importance of accessibility and performance, we dive into the key advancements that will define the next generation of web applications.",
-            },
-            {
-              title: "Mastering React Hooks",
-              author: "Jane Smith",
-              date: "May 1, 2023",
-              content: "Lorem ipsum",
-            },
-            {
-              title: "The Rise of Serverless Computing",
-              author: "Michael Johnson",
-              date: "June 1, 2023",
-              content:
-                "Serverless computing is transforming the way we build and deploy web applications. In this article, we examine the benefits of serverless, including scalability, cost optimization, and developer productivity. Discover how serverless platforms like AWS Lambda and Google Cloud Functions are empowering developers to focus on their application logic rather than infrastructure management.",
-            },
-          ].map(({ title, author, date, content }) => (
-            <ArticleCard
-              key={title}
-              title={title}
-              author={author}
-              date={date}
-              content={content}
-            />
-          ))}
-        </div>
-        <div className="space-y-5">
-          <CategoryList />
-          <PopularPostList />
-        </div>
-      </main>
-      <Footer />
-    </div>
+    <main className="flex-1 grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-10 p-4 md:p-8">
+      <div className="space-y-8">
+        {[
+          {
+            title: "The Future of Web Development",
+            author: "John Doe",
+            date: "April 15, 2023",
+            content:
+              "In this article, we explore the latest trends and technologies shaping the future of web development. From the rise of serverless architectures to the increasing importance of accessibility and performance, we dive into the key advancements that will define the next generation of web applications.",
+          },
+          {
+            title: "Mastering React Hooks",
+            author: "Jane Smith",
+            date: "May 1, 2023",
+            content: "Lorem ipsum",
+          },
+          {
+            title: "The Rise of Serverless Computing",
+            author: "Michael Johnson",
+            date: "June 1, 2023",
+            content:
+              "Serverless computing is transforming the way we build and deploy web applications. In this article, we examine the benefits of serverless, including scalability, cost optimization, and developer productivity. Discover how serverless platforms like AWS Lambda and Google Cloud Functions are empowering developers to focus on their application logic rather than infrastructure management.",
+          },
+        ].map(({ title, author, date, content }) => (
+          <ArticleCard
+            key={title}
+            title={title}
+            author={author}
+            date={date}
+            content={content}
+          />
+        ))}
+      </div>
+      <div className="space-y-5">
+        <CategoryList />
+        <PopularPostList />
+      </div>
+    </main>
   );
 }
