@@ -18,9 +18,14 @@ const preProcess = () => (tree) => {
 };
 
 const postProcess = () => (tree) => {
-  visit(tree, "element", (node) => {
-    if (node?.type === "element" && node?.tagName === "pre") {
-      node.properties["raw"] = node.raw;
+  visit(tree, (node) => {
+    if (node?.type === "element" && node?.tagName === "figure") {
+      for (const child of node.children) {
+        if (child.tagName === "pre") {
+          console.log("postProcess", child);
+          child.properties["raw"] = node.raw;
+        }
+      }
     }
   });
 };
