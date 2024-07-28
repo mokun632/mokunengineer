@@ -5,13 +5,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
     pre: (props) => {
+      const { children, raw, ...rest } = props as {
+        children: React.ReactNode;
+        raw: string;
+        "data-language"?: string;
+      };
       return (
         <Pre
-          {...(props as {
-            children: React.ReactNode;
-            raw: string;
-            "data-language"?: string;
-          })}
+          children={children}
+          raw={raw as string}
+          data-language={rest["data-language"]}
         />
       );
     },
