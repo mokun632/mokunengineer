@@ -4,6 +4,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypePrettyCode from "rehype-pretty-code";
 import { visit } from "unist-util-visit";
+import remarkBreaks from "remark-breaks";
 
 const preProcess = () => (tree) => {
   visit(tree, (node) => {
@@ -22,7 +23,6 @@ const postProcess = () => (tree) => {
     if (node?.type === "element" && node?.tagName === "figure") {
       for (const child of node.children) {
         if (child.tagName === "pre") {
-          console.log("postProcess", child);
           child.properties["raw"] = node.raw;
         }
       }
@@ -39,7 +39,7 @@ const nextConfig = {
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [remarkGfm, remarkMath],
+    remarkPlugins: [remarkGfm, remarkMath, remarkBreaks],
     rehypePlugins: [
       rehypeKatex,
       preProcess,
