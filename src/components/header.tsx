@@ -80,7 +80,7 @@ const NavMenuWithDesctop = () => (
   <nav className="max-md:hidden flex items-center gap-4">
     {[
       {
-        href: "#",
+        href: "/",
         label: "Home",
       },
       {
@@ -111,7 +111,7 @@ const NavMenuWithDesctop = () => (
 
 export const Header = () => (
   <header className="bg-background border-b px-4 md:px-6 py-3 flex items-center justify-between gap-5">
-    <Link href="#" className="flex items-center gap-2" prefetch={false}>
+    <Link href="/" className="flex items-center gap-2" prefetch={false}>
       <MountainIcon className="w-6 h-6" />
       <span className="text-lg font-bold">Tech Blog</span>
     </Link>
