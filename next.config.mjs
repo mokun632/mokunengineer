@@ -21,6 +21,9 @@ const preProcess = () => (tree) => {
 const postProcess = () => (tree) => {
   visit(tree, (node) => {
     if (node?.type === "element" && node?.tagName === "figure") {
+      if (!("data-rehype-pretty-code-figure" in node.properties)) {
+        return;
+      }
       for (const child of node.children) {
         if (child.tagName === "pre") {
           child.properties["raw"] = node.raw;
