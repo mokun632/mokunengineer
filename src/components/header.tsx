@@ -59,7 +59,7 @@ const NavMenuWothMobile = () => (
                 label: "Contact",
               },
             ].map(({ href, label }) => (
-              <DropdownMenuLabel>
+              <DropdownMenuLabel key={`mobile-${label}`}>
                 <Link
                   href={href}
                   className="text-sm font-medium hover:underline"
@@ -96,7 +96,7 @@ const NavMenuWithDesctop = () => (
         label: "Contact",
       },
     ].map(({ href, label }) => (
-      <DropdownMenuLabel>
+      <DropdownMenuLabel key={`Desctop-${label}`}>
         <Link
           href={href}
           className="text-sm font-medium hover:underline"
