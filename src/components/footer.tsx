@@ -6,12 +6,6 @@ export const Footer = () => (
       <p>&copy; 2024 Tech Blog. All rights reserved.</p>
       <nav className="flex items-center gap-4">
         <Link href="#" className="hover:underline" prefetch={false}>
-          Privacy
-        </Link>
-        <Link href="#" className="hover:underline" prefetch={false}>
-          Terms
-        </Link>
-        <Link href="#" className="hover:underline" prefetch={false}>
           Contact
         </Link>
       </nav>
