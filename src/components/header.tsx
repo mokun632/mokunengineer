@@ -30,6 +30,7 @@ const NavMenu = () => (
       },
     ].map(({ href, label }) => (
       <Link
+        key={label}
         href={href}
         className="text-sm font-medium hover:underline"
         prefetch={false}
