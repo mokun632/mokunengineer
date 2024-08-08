@@ -11,12 +11,12 @@ export const Pre = ({
 }) => {
   const lang = props["data-language"] ?? "text";
   return (
-    <pre {...props} className="grid gap-4 py-3 px-5">
+    <pre className="grid gap-4 py-3 px-5">
       <div className="flex justify-between">
         {lang}
         <CopyButton text={raw} />
       </div>
-      {children}
+      <div className="overflow-x-scroll">{children}</div>
     </pre>
   );
 };
