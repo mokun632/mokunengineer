@@ -37,7 +37,7 @@ export default function Page() {
   const files = fs
     .readdirSync(`${process.cwd()}/src/app/contents`)
     .filter((file) => !file.startsWith("_") && !file.endsWith(".tsx"));
-  console.log({ files });
+
   return (
     <main className="flex-1 grid justify-center max-w-screen-xl gap-10 p-4 md:p-8 mx-auto">
       <div className="space-y-8">
