@@ -1,22 +1,19 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import fs from "fs";
 import Link from "next/link";
 
 const ArticleLink = ({
   href,
   title,
-  author,
   date,
   content,
 }: {
   href: string;
   title: string;
-  author: string;
   date: string;
   content: string;
 }) => (
-  <Link href={href}>
+  <Link href={href} className="block w-full">
     <article>
       <Card>
         <CardHeader>
@@ -31,9 +28,11 @@ const ArticleLink = ({
   </Link>
 );
 
+const CONTENT_DIRECTORY = `${process.cwd()}/src/app/contents/`;
+
 export default function Page() {
-  const files = fs
-    .readdirSync(`${process.cwd()}/src/app/contents`)
+  const pathNames = fs
+    .readdirSync(CONTENT_DIRECTORY)
     .filter((file) => !file.startsWith("_") && !file.endsWith(".tsx"));
 
   return (
@@ -41,19 +40,23 @@ export default function Page() {
       <div className="space-y-8">
         {[
           {
-            href: "/article/1",
-            title: "The Future of Web Development",
+            title: "The ",
+            author: "John Doe",
+            date: "April 15, 2023",
+            content: "In this article",
+          },
+          {
+            title: "The",
             author: "John Doe",
             date: "April 15, 2023",
             content:
               "In this article, we explore the latest trends and technologies shaping the future of web development. From the rise of serverless architectures to the increasing importance of accessibility and performance, we dive into the key advancements that will define the next generation of web applications.",
           },
-        ].map(({ title, author, date, content }, i) => (
+        ].map(({ title, date, content }, i) => (
           <ArticleLink
-            href={`/contents/${files[i]}`}
+            href={`/contents/${pathNames[i]}`}
             key={title}
             title={title}
-            author={author}
             date={date}
             content={content}
           />
