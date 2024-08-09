@@ -21,9 +21,7 @@ const ArticleLink = ({
       <Card>
         <CardHeader>
           <CardTitle>{title}</CardTitle>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div>{author}</div>
-            <Separator orientation="vertical" />
+          <div className="flex items-center text-sm text-muted-foreground">
             <div>{date}</div>
           </div>
         </CardHeader>
