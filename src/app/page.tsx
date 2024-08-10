@@ -35,8 +35,6 @@ export default function Page() {
     .readdirSync(CONTENT_DIRECTORY)
     .filter((file) => !file.startsWith("_") && !file.endsWith(".tsx"));
 
-  console.log(pathNames);
-
   return (
     <main className="flex-1 grid justify-center max-w-screen-xl gap-10 p-4 md:p-8 mx-auto">
       <div className="space-y-8">
