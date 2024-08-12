@@ -21,25 +21,26 @@ const MountainIcon = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
-const NavMenu = () => (
-  <nav className="flex items-center gap-4">
-    {[
-      {
-        href: "#",
-        label: "Contact",
-      },
-    ].map(({ href, label }) => (
-      <Link
-        key={label}
-        href={href}
-        className="text-sm font-medium hover:underline"
-        prefetch={false}
-      >
-        {label}
-      </Link>
-    ))}
-  </nav>
-);
+// 実装予定
+// const NavMenu = () => (
+//   <nav className="flex items-center gap-4">
+//     {[
+//       {
+//         href: "#",
+//         label: "Contact",
+//       },
+//     ].map(({ href, label }) => (
+//       <Link
+//         key={label}
+//         href={href}
+//         className="text-sm font-medium hover:underline"
+//         prefetch={false}
+//       >
+//         {label}
+//       </Link>
+//     ))}
+//   </nav>
+// );
 
 export const Header = () => (
   <header className="bg-background border-b px-4 md:px-6 py-3 flex items-center justify-between gap-5">
@@ -47,6 +48,6 @@ export const Header = () => (
       <MountainIcon className="w-6 h-6" />
       <span className="text-lg font-bold">Mokun Engineer Blog</span>
     </Link>
-    <NavMenu />
+    {/* 実装予定 <NavMenu /> */}
   </header>
 );
