@@ -43,7 +43,7 @@ useによって、Promiseがを読み取る場合は、use内でPromiseをThorw�
 > [!NOTE]
 > useの無限ループが発生した際に、fallbackが再び表示されると思われますが、実際には表示されません。
 > Suspend時に、props/stateの変更がなく、Suspendが起きた場合、前回のPromiseを再利用するためです。
-> ref: https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md#reading-the-result-of-a-promise-during-a-replay
+> [ref](https://github.com/acdlite/rfcs/blob/first-class-promises/text/0000-first-class-support-for-promises.md#reading-the-result-of-a-promise-during-a-replay)
 
 ### どのようにして、Promiseのキャッシュを判定しているのか
 さて、前述の通り、useはキャッシュされたPromiseを利用しないと無限ループが発生し、外部APIへのリクエスト等が多発してしまいます。
