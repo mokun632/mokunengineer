@@ -9,11 +9,11 @@ export const Pre = ({
   raw: string;
   "data-language"?: string;
 }) => {
-  const lang = props["data-language"] ?? "text";
+  const lang = props["data-language"] ?? "";
   return (
     <pre className="grid gap-4 py-3 px-5">
       <div className="flex justify-between">
-        {lang}
+        <span>{lang}</span>
         <CopyButton text={raw} />
       </div>
       <div className="overflow-x-scroll">{children}</div>
