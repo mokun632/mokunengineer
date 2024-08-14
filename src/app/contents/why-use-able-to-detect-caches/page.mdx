@@ -162,7 +162,7 @@ elseの中に入るのは、2回目以降のレンダリング時です。
 なぜ、初回レンダリング時でも警告が表示されるのでしょうか？
 答えは、Strict Modeです。
 Strict Modeにより、コンポーネントが2回実行され、trackedThenablesにthenableがある状態で、useが再実行されるので、elseの中に入ります。
-その時に、previousとthenableが異なる場合は、警告が表示されます。
+その時に、previousとthenableが異なる場合は、レンダリング中に作成されたPromiseとみなされ警告が表示されます。
 createThenableStateで空の配列を返す理由は、Promiseをtrackingして、同じPromiseなのか比較するためなんですね。
 
 ### まとめ
