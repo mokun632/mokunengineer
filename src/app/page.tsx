@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import fs from "fs";
 import Link from "next/link";
+import { ContentInfoType, CONTENTS_INFO } from "./contents/_lib/contents-info";
 
 const ArticleLink = ({
   href,
@@ -38,15 +39,20 @@ export default function Page() {
   return (
     <main className="flex-1 grid justify-center max-w-screen-xl gap-10 p-4 md:p-8 mx-auto">
       <div className="space-y-8">
-        {[{title: "なぜ、useはPromiseのキャッシュ判定ができるのか", date: "2024-08-11", content: "useは無限ループが起きてしまうので、渡されたPromiseがレンダリング間で変更されたか検知する事ができます。どうやって検知しているかを内部のコードを追いながら、見ていきます。"}].map(({ title, date, content }, i) => (
-          <ArticleLink
-            href={`/contents/${pathNames[i]}`}
-            key={title}
-            title={title}
-            date={date}
-            content={content}
-          />
-        ))}
+        {pathNames.map((p) => {
+          const { pathName, title, date, content } =
+            CONTENTS_INFO.find((contentInfo) => contentInfo.pathName === p) ??
+            ({} as ContentInfoType);
+          return (
+            <ArticleLink
+              href={`/contents/${pathName}`}
+              key={pathName}
+              title={title}
+              date={date}
+              content={content}
+            />
+          );
+        })}
       </div>
     </main>
   );

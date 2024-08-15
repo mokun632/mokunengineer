@@ -1,0 +1,89 @@
+## なぜ、ErrorBoundaryから復帰できないのか
+  
+
+### ErrorBoundaryとは
+Reactでは、[ErrorBoundary](https://ja.react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary)というコンポーネントが存在します。
+Suspenseのように、エラーが発生した際にはエラーをThrowし、ErrorBoundaryでキャッチする事ができ、fallbackを表示させる事ができます。
+
+### ErrorBoundaryでエラーがキャッチされた際にfallbackから復帰できない
+例えば、下記のようなコードがあるとします。
+```tsx
+const App = () => {
+  const navigate = useNavigate()
+  const params = new URLSearchParams(document.location.search);
+  const name = params.get("name"); 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = getFormData(e.currentTarget);
+    navigate(`/?name=${formData.name}`);
+  }
+
+  return (
+    <>
+      <ErrorBoundary fallback={<p>Something went wrong</p>}>
+        <Suspense fallback={<div>loading<div>}>
+          <DisplayData name={name} />
+        </Suspense>
+      </ErrorBoundary>
+      <form onSubmit={handleSubmit}>        
+        <input  name="name">
+        <button type="submit">submit</button>
+      </form>
+    </>
+  );
+};
+```
+inputに入力した値をURLパラメータに載せ、navigate（ページ遷移）してします。そしてそのURLパラメータでSuspendを発生させています。
+もし、DisplayData内でエラーが発生した場合、ErrorBoundaryでキャッチされfallbackが表示されるので、formには影響がいきません。
+なので、もう一度Submitし、再レンダリングを起こす事ができます。
+ただ、一度ErrorBoundaryでエラーがキャッチされた後、再度Submitを行なっても、ErrorBoundaryのfallbackが表示されたままです。
+なぜなのでしょうか？
+
+### なぜ、fallbackから復帰できないのか
+なぜ、再レンダリングを行なっても、ErrorBoundaryのfallbackが表示されたままなのでしょうか？
+これはErrorBoundaryのfallbackが表示されたまま再レンダリングを行なっても、コンポーネントツリーからは、ErrorBoundaryのchildrenが消えているからです。
+なので、この状態で再レンダリングを行なっても、ErrorBoundaryのfallbackを再レンダリングしているにすぎないです。
+
+### 対処法
+対処法は簡単です。
+```tsx
+const App = () => {
+  const navigate = useNavigate()
+  const params = new URLSearchParams(document.location.search);
+  const name = params.get("name"); 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = getFormData(e.currentTarget);
+    navigate(`/?name=${formData.name}`);
+  }
+
+  return (
+    <>
+      <ErrorBoundary key={name} fallback={<p>Something went wrong</p>}>
+        <Suspense fallback={<div>loading<div>}>
+          <DisplayData name={name} />
+        </Suspense>
+      </ErrorBoundary>
+      <form onSubmit={handleSubmit}>        
+        <input  name="name">
+        <button type="submit">submit</button>
+      </form>
+    </>
+  );
+};
+```
+ErrorBoundaryにkeyを挿して、再度レンダリングをさせてあげれば、ErrorBoundaryのchildrenごとレンダリングされます。
+keyが変わる事で起こるレンダリングは再レンダリングではなく、初期レンダリングなんですね。
+なので、その際childrenが復活してくれるという事です。
+
+> [!NOTE]
+> これは、Suspenseにも言える事です。
+> 再レンダリングでSuspendが起きるよう再レンダリングを起こしても、fallbackは表示されません。
+> 同じように、再レンダリングが起きる度に、異なるkeyを挿入する事で、再度Suspendを起こす事ができます。
+> [ref](https://ja.react.dev/reference/react/Suspense#resetting-suspense-boundaries-on-navigation)
+> [ref 2](https://x.com/asidorenko_/status/1712523853207847241)
+
+
+
