@@ -25,19 +25,24 @@ const CustomLink = (props: ComponentPropsWithoutRef<"a">) => {
 const Code = (props: ComponentPropsWithoutRef<"code">) => {
   const codeStr = props.children?.toString() || "";
   const { children, ...rest } = props;
-  console.log({ props });
   let codeHTML = highlight(codeStr);
   return (
     <>
-      <div className="flex justify-end mb-1">
+      <div className="absolute top-2 right-2">
         <CopyButton text={codeStr} />
       </div>
-      <code
-        className="overflow-x-scroll"
-        dangerouslySetInnerHTML={{ __html: codeHTML }}
-        {...rest}
-      />
+      <div className="mb-10" />
+      <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...rest} />
     </>
+  );
+};
+
+const Pre = (props: ComponentPropsWithoutRef<"pre">) => {
+  const { children, ...rest } = props;
+  return (
+    <div className="relative">
+      <pre {...rest}>{children}</pre>
+    </div>
   );
 };
 
@@ -49,6 +54,7 @@ export const CustomMDX = (props: MDXRemoteProps) => {
         ...{
           a: CustomLink,
           code: Code,
+          pre: Pre,
         },
         ...(props.components || {}),
       }}

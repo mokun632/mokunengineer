@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Clipboard } from "lucide-react";
 import { ClipboardCheck } from "lucide-react";
 
-export const CopyButton = ({ text }: { text: string }) => {  
+export const CopyButton = ({ text }: { text: string }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copy = async () => {
