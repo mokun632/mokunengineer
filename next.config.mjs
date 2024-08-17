@@ -43,6 +43,7 @@ const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [remarkGfm, remarkMath, remarkBreaks],
+    transpilePackages: ['next-mdx-remote'],
     rehypePlugins: [
       rehypeKatex,
       preProcess,
