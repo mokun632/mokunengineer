@@ -1,4 +1,4 @@
-import { CopyButton } from "@/app/contents/_components/copy-button";
+import { CopyButton } from "@/components/copy-button";
 
 export const Pre = ({
   children,
