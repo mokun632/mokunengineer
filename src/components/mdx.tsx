@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from "react";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -46,6 +46,24 @@ const Pre = (props: ComponentPropsWithoutRef<"pre">) => {
   return <pre className="grid gap-4 py-3 px-5">{children}</pre>;
 };
 
+const createHeading = (level: number) => {
+  const Heading = (props: ComponentPropsWithoutRef<"h1">) => {
+    const slug = props.children as string;
+    return React.createElement(`h${level}`, { id: slug }, [
+      React.createElement("a", {
+        href: `#${slug}`,
+        key: `link-${slug}`,
+        className: "anchor",
+      }),
+      slug,
+    ]);
+  };
+
+  Heading.displayName = `Heading${level}`;
+
+  return Heading;
+};
+
 export const CustomMDX = (props: MDXRemoteProps) => {
   return (
     <MDXRemote
@@ -53,6 +71,12 @@ export const CustomMDX = (props: MDXRemoteProps) => {
       components={{
         ...{
           a: CustomLink,
+          h1: createHeading(1),
+          h2: createHeading(2),
+          h3: createHeading(3),
+          h4: createHeading(4),
+          h5: createHeading(5),
+          h6: createHeading(6),
           pre: Pre,
           code: Code,
         },
