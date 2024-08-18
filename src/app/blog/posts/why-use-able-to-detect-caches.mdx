@@ -1,7 +1,7 @@
 ---
-title: "なぜ、ErrorBoundaryから復帰できないのか"
-publishedAt: "2024-08-15"
-description: "ErrorBoundaryでエラーがキャッチされfallbackが表示された状態で再レンダリングを起こしても、再びErrorBoundaryのchildrenが表示される事はありません。どうすれば、再度childrenを表示できるのか原因と対処法を解説します。"
+title: "なぜ、useはPromiseのキャッシュ判定ができるのか"
+publishedAt: "2024-08-11"
+description: "useは無限ループが起きてしまうので、渡されたPromiseがレンダリング間で変更されたか検知する事ができます。どうやって検知しているかを内部のコードを追いながら、見ていきます。"
 ---
 
 ## なぜ、use は Promise のキャッシュ判定ができるのか
