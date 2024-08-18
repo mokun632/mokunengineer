@@ -71,7 +71,7 @@ const Counter = () => {
 ```
 
 これはどういう事かと言うと、Counter から、count を increment するというロジックを切り出して、共有可能にしたという事です。
-つまり、本質は count という "state" ではなく、increment という"ロジック"を共有しているという事です。（そもそも useCounter が別々で宣言された場合、count は、それぞれ独立するので、共有できません。）
+つまり、本質は count という "state" ではなく、increment という"state を扱うロジック"を共有しているという事です。（そもそも useCounter が別々で宣言された場合、count は、それぞれ独立するので、共有できません。）
 useCounter の場合は、内部に count という state を持っていた方が都合が良いので、そうしているだけで、必ずしもそうする必要はありません。
 
 <details>
@@ -136,8 +136,8 @@ const App = () => {
 ```
 
 このコンポーネントは、スクロールした時に、コンソールに "window scrolled!" という文字列を出力するというロジックを持っています。
-useEventListener は、このロジックを共有できていない上に、"state を扱うロジック"ですらないです。
-useEffect のラッパーに過ぎないように見えます。
+useEventListener は、このロジックを共有できていない上に、"state を扱うロジック"ですらないですし、useEventListener という名前から、Event を Listen して、結局何をするのかがわからないです。
+誤った粒度の抽象化に見えますし、useEffect のラッパーに過ぎないように見えます。
 もし、やるのだとしたら、下記のようなコードの方が良いのではないかと思います。
 
 ```tsx
@@ -162,9 +162,9 @@ const App = () => {
 ```
 
 かなり、無理矢理ではありますが、logMsg という state を扱うロジックを共有しているという事になります。
-ですが、無理矢理と言ったように、そもそもこう言ったコードは直接コンポーネントに書くべきだと思います。
 [この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#when-to-use-custom-hooks)や[この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#there-is-more-than-one-way-to-do-it)でも書かれているように、必ずしも カスタムフックにするだけが正解ではないです。
 直接コンポーネントに記述した方が、煩雑にならず、コードの理解がしやすい場合もあります。
+まぁ、ただ、useEventListener のようなコードがあった方が、コードがスッキリするというのも理解できるので、難しいですね 🤔
 
 ### まとめ
 
