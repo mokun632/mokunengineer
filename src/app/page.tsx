@@ -1,18 +1,17 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import fs from "fs";
 import Link from "next/link";
-import { ContentInfoType, CONTENTS_INFO } from "./contents/_lib/contents-info";
+import { getBlogPosts } from "./blog/utils";
 
 const ArticleLink = ({
   href,
   title,
-  date,
-  content,
+  publishedAt,
+  description,
 }: {
   href: string;
   title: string;
-  date: string;
-  content: string;
+  publishedAt: string;
+  description: string;
 }) => (
   <Link href={href} className="block w-full">
     <article>
@@ -20,39 +19,36 @@ const ArticleLink = ({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <div className="flex items-center text-sm text-muted-foreground">
-            <div>{date}</div>
+            <div>{publishedAt}</div>
           </div>
         </CardHeader>
-        <CardContent>{content}</CardContent>
+        <CardContent>{description}</CardContent>
       </Card>
     </article>
   </Link>
 );
 
-const CONTENT_DIRECTORY = `${process.cwd()}/src/app/contents/`;
-
 export default function Page() {
-  const pathNames = fs
-    .readdirSync(CONTENT_DIRECTORY)
-    .filter((file) => !file.startsWith("_") && !file.endsWith(".tsx"));
+  const allBlogs = getBlogPosts();
 
   return (
     <main className="flex-1 grid justify-center max-w-screen-xl gap-10 p-4 md:p-8 mx-auto">
       <div className="space-y-8">
-        {pathNames.map((p) => {
-          const { pathName, title, date, content } =
-            CONTENTS_INFO.find((contentInfo) => contentInfo.pathName === p) ??
-            ({} as ContentInfoType);
-          return (
+        {allBlogs
+          .sort((a, b) =>
+            new Date(a.metadata.publishedAt) < new Date(b.metadata.publishedAt)
+              ? 1
+              : -1
+          )
+          .map((blog) => (
             <ArticleLink
-              href={`/contents/${pathName}`}
-              key={pathName}
-              title={title}
-              date={date}
-              content={content}
+              key={blog.slug}
+              href={`/blog/${blog.slug}`}
+              title={blog.metadata.title}
+              publishedAt={blog.metadata.publishedAt}
+              description={blog.metadata.description}
             />
-          );
-        })}
+          ))}
       </div>
     </main>
   );
