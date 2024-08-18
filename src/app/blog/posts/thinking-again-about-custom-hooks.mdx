@@ -71,7 +71,7 @@ const Counter = () => {
 ```
 
 これはどういう事かと言うと、Counter から、count を increment するというロジックを切り出して、共有可能にしたという事です。
-つまり、本質は count という "state" ではなく、increment という"ロジック"を共有しているという事です。
+つまり、本質は count という "state" ではなく、increment という"ロジック"を共有しているという事です。（そもそも useCounter が別々で宣言された場合、count は、それぞれ独立するので、共有できません。）
 useCounter の場合は、内部に count という state を持っていた方が都合が良いので、そうしているだけで、必ずしもそうする必要はありません。
 
 <details>
