@@ -162,6 +162,8 @@ const App = () => {
 ```
 
 かなり、無理矢理ではありますが、logMsg という state を扱うロジックを共有しているという事になります。
+useScrollConsoleLog という名前から、scroll した時に、コンソールにログを出力するという事がわかります。
+useScrollConsoleLog 内部で Event を Listen しているなども意識せずに済みますね。
 [この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#when-to-use-custom-hooks)や[この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#there-is-more-than-one-way-to-do-it)でも書かれているように、必ずしも カスタムフックにするだけが正解ではないです。
 直接コンポーネントに記述した方が、煩雑にならず、コードの理解がしやすい場合もあります。
 まぁ、ただ、useEventListener のようなコードがあった方が、コードがスッキリするというのも理解できるので、難しいですね 🤔
