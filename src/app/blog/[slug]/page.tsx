@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 import { getBlogPosts } from "../utils";
 import { CustomMDX } from "@/components/mdx";
 
-export const baseUrl = "https://www.mokun-engineer.com/";
-
 export const generateStaticParams = async () => {
   const posts = getBlogPosts();
 
