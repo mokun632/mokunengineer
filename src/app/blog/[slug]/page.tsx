@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getBlogPosts } from "../utils";
+import { baseUrl, getBlogPosts } from "../utils";
 import { CustomMDX } from "@/components/mdx";
 
 export const generateStaticParams = async () => {
@@ -16,8 +16,8 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
     return;
   }
 
-  let { title, publishedAt, description, image } = post.metadata;
-  let ogImage = image
+  const { title, publishedAt, description, image } = post.metadata;
+  const ogImage = image
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`;
 
