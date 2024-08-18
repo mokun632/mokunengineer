@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { ComponentPropsWithoutRef } from "react";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import { highlight } from "sugar-high";
+import remarkGfm from "remark-gfm";
+import remarkBreaks from "remark-breaks";
+import remarkMath from "remark-math";
 import { CopyButton } from "@/components/copy-button";
+import rehypeKatex from "rehype-katex";
+import { highlight } from "sugar-high";
 
 const CustomLink = (props: ComponentPropsWithoutRef<"a">) => {
   let href = props.href;
@@ -24,26 +28,22 @@ const CustomLink = (props: ComponentPropsWithoutRef<"a">) => {
 
 const Code = (props: ComponentPropsWithoutRef<"code">) => {
   const codeStr = props.children?.toString() || "";
-  const { children, ...rest } = props;
   let codeHTML = highlight(codeStr);
   return (
     <>
-      <div className="absolute top-2 right-2">
+      <div className="flex justify-end">
         <CopyButton text={codeStr} />
       </div>
-      <div className="mb-10" />
-      <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...rest} />
+      <div className="overflow-x-auto">
+        <code dangerouslySetInnerHTML={{ __html: codeHTML }} />
+      </div>
     </>
   );
 };
 
 const Pre = (props: ComponentPropsWithoutRef<"pre">) => {
-  const { children, ...rest } = props;
-  return (
-    <div className="relative">
-      <pre {...rest}>{children}</pre>
-    </div>
-  );
+  const { children } = props;
+  return <pre className="grid gap-4 py-3 px-5">{children}</pre>;
 };
 
 export const CustomMDX = (props: MDXRemoteProps) => {
@@ -53,10 +53,16 @@ export const CustomMDX = (props: MDXRemoteProps) => {
       components={{
         ...{
           a: CustomLink,
-          code: Code,
           pre: Pre,
+          code: Code,
         },
         ...(props.components || {}),
+      }}
+      options={{
+        mdxOptions: {
+          remarkPlugins: [remarkGfm, remarkMath, remarkBreaks],
+          rehypePlugins: [rehypeKatex],
+        },
       }}
     />
   );
