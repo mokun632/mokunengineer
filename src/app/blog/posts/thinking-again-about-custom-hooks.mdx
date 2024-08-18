@@ -1,0 +1,180 @@
+---
+title: " カスタムフックについて、改めて考えてみる"
+publishedAt: "2024-08-18"
+description: "改めてカスタムフックとは何のかReactのドキュメントを眺めながら考える。"
+---
+
+## カスタムフック について、改めて考えてみる
+
+### はじめに
+
+今回の記事は、カスタムフック について、改めて何者で何をすべきなのかを React のドキュメントを見ながら考えてみる記事です。
+カスタムフック の基礎知識や、具体的な カスタムフック の実装など については触れません。
+また、カスタムフック については、若干曖昧な所もあり、私なりの解釈も含まれていますが、ご了承ください。
+
+### 改めて カスタムフック とは？
+
+もうそんな事知っているよ、と思われるかもしれませんが、改めて カスタムフック とは何なのかを考えてみます。
+React の[ドキュメント](https://ja.react.dev/learn/reusing-logic-with-custom-hooks)には、カスタムフック について以下のように記載されています。
+
+> [コンポーネント間でのロジック共有](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#custom-hooks-sharing-logic-between-components)
+
+それはそうという感じですが、意外とできていない時もあるのではないでしょうか。
+例えば、以下のような ただのデータの塊を返すなど。
+
+```jsx
+const useUserList = () => {
+  return [
+    { id: 1, name: "mike" },
+    { id: 2, name: "john" },
+    { id: 3, name: "jane" },
+  ];
+};
+```
+
+これは、何もロジックを共有していないので、カスタムフック とは言えないかもしれません。
+また、意外かつ他にもよくやりがちなアンチパターンがありますが、それは後述します。
+
+### カスタムフック は state 自体ではなく、state を使うロジックを共有する
+
+[ref](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#custom-hooks-let-you-share-stateful-logic-not-state-itself)
+
+びっくりした方もいるかもしれませんが、カスタムフック は state 自体を共有するものではなく、state を使うロジックを共有するものです。
+カスタムフック 内で state を扱ってしまっているという方がほとんどなのではないでしょうか。
+ですが、安心してください。
+これは、カスタムフック 内で state を扱ってはいけないという意味ではないです。
+ドキュメント内のサンドボックスを見てもらえればわかるますが、普通に state を扱っています。
+では、どういう意味なのでしょうか。
+
+```tsx
+const Counter = () => {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount((c) => c + 1);
+  return <button onClick={increment}>{count}</button>;
+};
+```
+
+例えば、上記のようなカウンターのコンポーネントがあるとします。
+count と increment を切り出して、カスタムフック に出来そうですね。
+
+```tsx
+export const useCounter = () => {
+  const [count, setCount] = useState(0);
+  const increment = () => setCount((c) => c + 1);
+  return { count, increment };
+};
+
+const Counter = () => {
+  const { count, increment } = useCounter();
+  return <button onClick={increment}>{count}</button>;
+};
+```
+
+これはどういう事かと言うと、Counter から、count を increment するというロジックを切り出して、共有可能にしたという事です。
+つまり、本質は count という "state" ではなく、increment という"state を扱うロジック"を共有しているという事です。（そもそも useCounter が別々で宣言された場合、count は、それぞれ独立するので、共有できません。）
+useCounter の場合は、内部に count という state を持っていた方が都合が良いので、そうしているだけで、必ずしもそうする必要はありません。
+
+<details>
+  <summary>余談</summary>
+
+これは余談ですが、かつてドキュメントには[この部分](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#custom-hooks-let-you-share-stateful-logic-not-state-itself:~:text=%E8%87%AA%E4%BD%93%E3%81%A7%E3%81%AF%E3%81%AA%E3%81%8F%E3%80%81-,state%20%E3%82%92%E6%89%B1%E3%81%86%E3%83%AD%E3%82%B8%E3%83%83%E3%82%AF,-%E3%82%92%E5%85%B1%E6%9C%89%E3%81%A7%E3%81%8D%E3%82%8B)は、stateful
+logic という言葉が使われていました。 ですが、日本語ですと、曖昧なので、state を扱うロジックという言葉に変更されたようですね。（英語だと
+stateful logic という単語が使われています。）
+
+</details>
+
+### 意外なアンチパターン
+
+[ドキュメント](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#keep-your-custom-hooks-focused-on-concrete-high-level-use-cases)には、カスタムフック について以下のように記載されています。
+
+> カスタムフックは具体的かつ高レベルなユースケースに対して使う
+
+高レベルなユースケースとは、どういったものでしょうか。
+ドキュメントには下記のような例が挙げられています。
+
+- useData(url)
+- useImpressionLog(eventName, extraData)
+- useChatRoom(options)
+- useMediaQuery(query)
+- useSocket(url)
+- useIntersectionObserver(ref, options)
+
+具体的で、一目見て何をするのか、よくわかりますね。
+また、より専門的なドメインに近づいた名前にしても、そのドメインに精通している人が理解できれば、それでも問題ないと思います。
+逆にアンチパターンは、何なのでしょうか。
+
+- useMount(fn)
+- useEffectOnce(fn)
+- useUpdateEffect(fn)
+
+これは、単なる useEffect のラッパーであり、特に state を扱う為のロジックを共有していません。
+良い カスタムフック は、ロジックを制御し、呼び出し側のコードをより宣言にするものです。
+
+これは個人的な見解なのですが、useEventListener なども、このアンチパターンに近いと思います。
+
+```tsx
+export const useEventListener = (
+  eventName: string,
+  handler: (event: Event) => void
+) => {
+  useEffect(() => {
+    window.addEventListener(eventName, handler);
+    return () => {
+      window.removeEventListener(eventName, handler);
+    };
+  }, [eventName, handler]);
+};
+
+const App = () => {
+  const onScroll = (_: Event) => {
+    console.log("window scrolled!");
+  };
+
+  useEventListener("scroll", onScroll);
+  return <div style={{ minHeight: "200vh" }}>App</div>;
+};
+```
+
+このコンポーネントは、スクロールした時に、コンソールに "window scrolled!" という文字列を出力するというロジックを持っています。
+useEventListener は、このロジックを共有できていない上に、"state を扱うロジック"ですらないですし、useEventListener という名前から、Event を Listen して、結局何をするのかがわからないです。
+誤った粒度の抽象化に見えますし、useEffect のラッパーに過ぎないように見えます。
+もし、やるのだとしたら、下記のようなコードの方が良いのではないかと思います。
+
+```tsx
+export const useScrollConsoleLog = (logMsg: string) => {
+  useEffect(() => {
+    const onScroll = (_: Event) => {
+      console.log("window scrolled!");
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+};
+
+const App = () => {
+  const [logMsg, setLogMsg] = useState("window scrolled!");
+  useScrollConsoleLog(logMsg);
+
+  return <div style={{ minHeight: "200vh" }}>App</div>;
+};
+```
+
+かなり、無理矢理ではありますが、logMsg という state を扱うロジックを共有しているという事になります。
+useScrollConsoleLog という名前から、scroll した時に、コンソールにログを出力するという事がわかります。
+useScrollConsoleLog 内部で Event を Listen しているなども意識せずに済みますね。
+[この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#when-to-use-custom-hooks)や[この章](https://ja.react.dev/learn/reusing-logic-with-custom-hooks#there-is-more-than-one-way-to-do-it)でも書かれているように、必ずしも カスタムフックにするだけが正解ではないです。
+直接コンポーネントに記述した方が、煩雑にならず、コードの理解がしやすい場合もあります。
+まぁ、ただ、useEventListener のようなコードがあった方が、コードがスッキリするというのも理解できるので、難しいですね 🤔
+
+### まとめ
+
+私なりの解釈なども含まれていますが、カスタムフック について、改めて考えてみました。
+この記事の内容をまとめると、以下のようになります。
+
+- カスタムフックは、コンポーネント間でのロジック共有を目的とする
+- カスタムフックは、state を使うロジックを共有するものである。
+- カスタムフックは、具体的で高レベルなユースケースに対して使う。
+
+個人的には、特に[カスタムフック は state 自体ではなく、state を使うロジックを共有する](#カスタムフック%20は%20state%20自体ではなく、state%20を使うロジックを共有する)が、重要だと思います。
