@@ -1,0 +1,134 @@
+---
+title: "トランジションによるSuspendでもfallbackを表示させたい"
+publishedAt: "2024-08-22"
+description: "トランジションによるSuspendは本来fallbackは表示されませんが、表示する事も可能です。どのようにすればfallbackを表示させる事ができるのかを解説します。"
+---
+
+## トランジションによる Suspend でも fallback を表示させたい
+
+### はじめに
+
+まず、下記のようなコードでは、Suspend しても fallback は表示されません。
+
+```tsx
+const App = () => {
+  const params = new URLSearchParams(document.location.search);
+  const name = params.get("name");
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    startTransition(() => {
+      navigate(`/?name=${value}`);
+    });
+    navigate(`/?name=${value}`);
+  };
+
+  return (
+    <>
+      <Search onChange=(handleChange) />
+      <Suspense fallback={<div>loading</div>}>
+        <CustomrerInfo value={name} />
+      </Suspense>
+    </>
+  );
+};
+```
+
+上記コードは Search で入力した値を URL パラメータに載せ、CustomrerInfo でその URL パラメータを使って検索を行っています。
+[トランジションとしてマークされた state 更新](https://ja.react.dev/reference/react/Suspense#preventing-already-revealed-content-from-hiding)は、Suspend しても fallback は表示されないです。
+これは fallback により、本来表示されるべきコンテンツが隠れてしまうのを防ぐのに有効です。
+しかも、トランジションによる state 更新は中断可能です。
+上記コードの場合、検索に時間が掛かった場合、その間に onChange により navigate を発火させ（もしくは他のコンテンツを操作し、state 更新を行うなどして）、再度 state 更新を行えば、時間の掛かる検索を中断する事ができます。
+これは時間の掛かる処理を中断以外にも、ユーザの気が変わった時に前回の操作の処理を待たずに即座に次の操作を行う事ができるので、ユーザの体験を向上させる事ができます。
+ですが、今回の場合ですと、本来表示されるべきコンテンツ（input 要素）は、すでに Suspense Bounday の外にある上に、先ほど申し上げたようにトランジションによる Suspend なので、fallback は表示されません。
+今のままでは、ユーザのインタラクションへの画面からのレスポンスが何もないので、むしろ fallback を表示させたいです。
+ならば、そもそもトランジションをやめてしまえば、fallback は表示されるようになりますね。
+ですが、それだと、state 更新を中断できるという恩恵を受けられなくなってしまいます。
+トランジションの恩恵を受けたいでも、fallback を表示させたい場合、どうすれば良いのでしょうか？
+まぁ、useTransition の isPending を使えば、fallback を表示させる事は可能なのですが、できれば、Suspense で宣言的にローディング中かを制御したいですよね。
+
+### Suspense Bounday をリセットする
+
+早速、結論ですが、下記のように書けば、トランジションによる Suspend でも fallback を表示させる事ができます。
+
+```tsx
+const App = () => {
+  const params = new URLSearchParams(document.location.search);
+  const name = params.get("name");
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    startTransition(() => {
+      navigate(`/?name=${value}`);
+    });
+    navigate(`/?name=${value}`);
+  };
+
+  return (
+    <>
+      <Search onChange=(handleChange) />
+      <Suspense key={name} fallback={<div>loading</div>}>
+        <CustomrerInfo value={name} />
+      </Suspense>
+    </>
+  );
+};
+```
+
+これは[こちらの記事](https://www.mokun-engineer.com/blog/why-can-not-recover-from-error-boundary#%E5%AF%BE%E5%87%A6%E6%B3%95)のコードとやっている事は同じです。
+key に name を指定する事で、Suspense Bounday をリセットしています。
+startTransition はノンブロッキングな再レンダリングを行うものです。[ref](https://ja.react.dev/reference/react/useTransition)
+key によるレンダリングは初期レンダリングと同じ扱いになり、再レンダリングとは異なるので、トランジションが無効になり、Suspense でも fallback を表示させる事ができます。
+
+## よくあるユースケース
+
+Next.js App Router で新たに実装された useRouter（next/navigation の方）の router.push や React Router の useNavigate などは、デフォルトでトランジションになっています。
+[ref(Next.js)](https://github.com/vercel/next.js/discussions/54157#discussioncomment-6763231)
+[ref(React Router)](https://reactrouter.com/en/main/hooks/use-navigate#:~:text=default%20React.startTransition.)
+これらの関数を使った検索の実装の際は、key によるリセットを行なった方が良いかもしれません。
+
+```tsx
+'use client'
+
+import { useSearchParams, useRouter } from 'next/navigation'
+
+const App = () => {
+  const searchParams = useSearchParams()
+  const name = searchParams.get('name')
+  const router = useRouter()
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    router.push(`/?name=${value}`);
+  };
+
+  return (
+    <>
+      <Search onChange=(handleChange) />
+      <Suspense fallback={<div>loading</div>}>
+        <CustomrerInfo value={name} />
+      </Suspense>
+    </>
+  );
+};
+```
+
+```tsx
+import { useSearchParams, useNavigate } from "react-router-dom";
+
+const App = () => {
+  let [searchParams] = useSearchParams();
+  const name = searchParams.get('name')
+  const navigate = useNavigate()
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+    navigate(`/?name=${value}`);
+  };
+
+  return (
+    <>
+      <Search onChange=(handleChange) />
+      <Suspense fallback={<div>loading</div>}>
+        <CustomrerInfo value={name} />
+      </Suspense>
+    </>
+  );
+};
+```
