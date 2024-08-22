@@ -90,9 +90,3 @@ const App = () => {
 ErrorBoundary に key を挿して、再度レンダリングをさせてあげれば、ErrorBoundary の children ごとレンダリングされます。
 key が変わる事で起こるレンダリングは再レンダリングではなく、初期レンダリングなんですね。
 なので、その際 children が復活してくれるという事です。
-
-> [!NOTE]
-> これは、Suspense にも言える事です。
-> 再レンダリングで Suspend が起きるよう再レンダリングを起こしても、fallback は表示されません。
-> 同じように、再レンダリングが起きる度に、異なる key を挿入する事で、再度 Suspend を起こす事ができます。
-> [ref](https://ja.react.dev/reference/react/Suspense#resetting-suspense-boundaries-on-navigation) > [ref 2](https://x.com/asidorenko_/status/1712523853207847241)
