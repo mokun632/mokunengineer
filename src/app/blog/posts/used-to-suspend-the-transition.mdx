@@ -76,7 +76,7 @@ const App = () => {
 これは[こちらの記事](https://www.mokun-engineer.com/blog/why-can-not-recover-from-error-boundary#%E5%AF%BE%E5%87%A6%E6%B3%95)のコードとやっている事は同じです。
 key に name を指定する事で、Suspense Bounday をリセットしています。
 startTransition はノンブロッキングな再レンダリングを行うものです。[ref](https://ja.react.dev/reference/react/useTransition)
-key によるレンダリングは初期レンダリングと同じような扱うになるので、トランジションによる Suspense でも fallback を表示させる事ができます。
+key によるレンダリングは初期レンダリングと同じような扱いになり、再レンダリングとは異なるので、トランジションが無効になり、Suspense でも fallback を表示させる事ができます。
 
 ## よくあるユースケース
 
