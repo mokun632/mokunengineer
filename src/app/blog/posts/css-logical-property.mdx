@@ -1,0 +1,49 @@
+---
+title: "CSSの論理的プロパティについて"
+publishedAt: "2024-08-29"
+description: "論理的プロパティとは何なのかと、その生まれた背景も解説します。"
+---
+
+## CSS の論理的プロパティについて
+
+### 論理的プロパティとは？
+
+従来の CSS プロパティの物理的な方向に基づく定義ではなく、論理的な方向に基づいて定義できるものです。
+全てのプロパティは紹介しきれないので、いくつか代表的なものだけ挙げます。
+
+- margin-block
+- margin-block-start
+- margin-block-end
+
+これらは書字方向に基づいて、値を定義します。
+
+### 書字方向と論理プロパティの関係性
+
+writing-mode で書字方向を変える事が出来ます。
+デフォルト値は、horizontal-tb で垂直方向は上から下、水平方向に左から右になります。
+つまり、margin-block-start の場合、垂直方向の start、つまり上側に margin が入ります。
+※ 書字方向を変えられる CSS プロパティは、他にも direction、text-orientation などがありますが、ここでは取り扱いません。
+
+### writing-mode によって、inline、block の意味が変わる
+
+では、margin-inline-start の場合、margin はどこに入るのでしょうか？
+それは右側に入ります。
+margin-block や margin-inline の block や inline は、display の inline や block とは無関係ではありますが、イメージは似ています。
+block 要素は、上からスタックされていき、inline 要素は左から右に流れていきますね。
+writing-mode がデフォルト値の horizontal-tb の場合、全く同じになります。
+ですが、vertical-rl を指定した場合、どうでしょう。
+inline が上から下になり、block が右から左になります。
+vertical-rl で margin-inline-start の場合は、上側に margin が入ります。
+
+### 論理プロパティが生まれた背景
+
+かつては、主に英語などの左から右に読む言語のみを前提として、CSS は開発されてきました。
+ですが、より様々な言語、より多くの人々が直感的にスタイリングできるようにするために論理プロパティや書字モードが生まれました。
+
+### 参考文献
+
+[CSS Writing Modes Level 3](https://www.w3.org/TR/css-writing-modes-3/)
+[CSS Logical Properties and Values Level 1](https://www.w3.org/TR/css-logical-1/)
+[CSS 書字方向](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_writing_modes)
+[writing-mode](https://developer.mozilla.org/ja/docs/Web/CSS/writing-mode)
+[CSS 論理的プロパティと値](https://developer.mozilla.org/ja/docs/Web/CSS/CSS_logical_properties_and_values)
