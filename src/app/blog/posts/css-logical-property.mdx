@@ -23,7 +23,7 @@ writing-mode で書字方向を変える事が出来ます。
 つまり、margin-block-start の場合、垂直方向の start、つまり上側に margin が入ります。
 ※ 書字方向を変えられる CSS プロパティは、他にも direction、text-orientation などがありますが、ここでは取り扱いません。
 
-### writing-mode によって、inline、block の意味が変わる
+### writing-mode によって、inline、block の定義が変わる
 
 では、margin-inline-start の場合、margin はどこに入るのでしょうか？
 それは左側に入ります。
@@ -32,9 +32,11 @@ writing-mode で書字方向を変える事が出来ます。
 margin-block や margin-inline の block や inline は、display の inline や block とは無関係ではありますが、イメージは似ています。
 block 要素は、上からスタックされていき、inline 要素は左から右に流れていきますね。
 writing-mode がデフォルト値の horizontal-tb の場合、全く同じになります。
+inline は左から右なので start が左になり、margin-inline-start の場合、左側に margin が入る訳ですね。
 ですが、vertical-rl を指定した場合、どうでしょう。
 inline が上から下になり、block が右から左になります。
 vertical-rl で margin-inline-start の場合は、上側に margin が入ります。
+このように、writing-mode によって、inline、block の定義を変える事ができます。
 
 ### 論理プロパティが生まれた背景
 
