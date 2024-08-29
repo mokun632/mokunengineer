@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         integrity="sha384-KiWOvVjnN8qwAZbuQyWDIbfCLFhLXNETzBQjA/92pIowpC0d2O3nppDGQVgwd2nB"
         crossOrigin="anonymous"
       />
-      <article className="prose mx-auto pb-12 px-8">{children}</article>
+      <article className="prose mx-auto pb-12 px-8 flex-1">{children}</article>
     </>
   );
 }
