@@ -26,7 +26,9 @@ writing-mode で書字方向を変える事が出来ます。
 ### writing-mode によって、inline、block の意味が変わる
 
 では、margin-inline-start の場合、margin はどこに入るのでしょうか？
-それは右側に入ります。
+それは左側に入ります。
+なぜ左側になるのでしょうか？
+その前にここで言う block と inline の違いから説明します。
 margin-block や margin-inline の block や inline は、display の inline や block とは無関係ではありますが、イメージは似ています。
 block 要素は、上からスタックされていき、inline 要素は左から右に流れていきますね。
 writing-mode がデフォルト値の horizontal-tb の場合、全く同じになります。
