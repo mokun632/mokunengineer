@@ -1,5 +1,9 @@
 import Link from "next/link";
-import React, { ComponentPropsWithoutRef } from "react";
+import React, {
+  ComponentPropsWithoutRef,
+  ReactElement,
+  ReactNode,
+} from "react";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -7,6 +11,12 @@ import remarkMath from "remark-math";
 import { CopyButton } from "@/components/copy-button";
 import rehypeKatex from "rehype-katex";
 import { highlight } from "sugar-high";
+import {
+  CircleAlert,
+  Lightbulb,
+  MessageSquareWarning,
+  OctagonAlert,
+} from "lucide-react";
 
 const CustomLink = (props: ComponentPropsWithoutRef<"a">) => {
   let href = props.href;
@@ -64,6 +74,100 @@ const createHeading = (level: number) => {
   return Heading;
 };
 
+type AlertType =
+  | "[!NOTE]"
+  | "[!TIP]"
+  | "[!IMPORTANT]"
+  | "[!WARNING]"
+  | "[!CAUTION]";
+
+const AlertBlock = ({
+  children,
+  alertLable,
+}: {
+  children: ReactElement;
+  alertLable: AlertType;
+}) => {
+  return (
+    <div>
+      <p className="flex gap-1">
+        <CircleAlert />
+        {alertLable}
+      </p>
+      {children}
+    </div>
+  );
+};
+
+const CustomBlockquote = (props: ComponentPropsWithoutRef<"blockquote">) => {
+  const children = props.children;
+  const childrensChildren = (children as ReactElement[])[1].props.children;
+  const alertStr = childrensChildren[0] as AlertType;
+  const alertContent = (childrensChildren as ReactNode[]).toSpliced(0, 2);
+
+  if (alertStr === "[!NOTE]") {
+    return (
+      <div className="border-l-4 px-2 border-l-blue-700">
+        <div className="flex gap-1 items-center">
+          <CircleAlert className="w-6 h-6" />
+          NOTE
+        </div>
+        {alertContent}
+      </div>
+    );
+  }
+
+  if (alertStr === "[!TIP]") {
+    return (
+      <div className="border-l-4 px-2 border-l-green-700">
+        <div className="flex gap-1 items-center text-green-700">
+          <Lightbulb className="w-6 h-6" />
+          TIP
+        </div>
+        {alertContent}
+      </div>
+    );
+  }
+
+  if (alertStr === "[!IMPORTANT]") {
+    return (
+      <div className="border-l-4 px-2 border-l-purple-700">
+        <div className="flex gap-1 items-center text-purple-700">
+          <MessageSquareWarning className="w-6 h-6" />
+          IMPORTANT
+        </div>
+        {alertContent}
+      </div>
+    );
+  }
+
+  if (alertStr === "[!WARNING]") {
+    return (
+      <div className="border-l-4 px-2 border-l-yellow-500">
+        <div className="flex gap-1 items-center">
+          <MessageSquareWarning className="w-6 h-6" />
+          WARNING
+        </div>
+        {alertContent}
+      </div>
+    );
+  }
+
+  if (alertStr === "[!CAUTION]") {
+    return (
+      <div className="border-l-4 px-2 border-l-red-700">
+        <div className="flex gap-1 items-center text-red-700">
+          <OctagonAlert className="w-6 h-6" />
+          CAUTION
+        </div>
+        {alertContent}
+      </div>
+    );
+  }
+
+  return <blockquote>{children}</blockquote>;
+};
+
 export const CustomMDX = (props: MDXRemoteProps) => {
   return (
     <MDXRemote
@@ -79,6 +183,7 @@ export const CustomMDX = (props: MDXRemoteProps) => {
           h6: createHeading(6),
           pre: Pre,
           code: Code,
+          blockquote: CustomBlockquote,
         },
         ...(props.components || {}),
       }}
