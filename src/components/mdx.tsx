@@ -81,24 +81,6 @@ type AlertType =
   | "[!WARNING]"
   | "[!CAUTION]";
 
-const AlertBlock = ({
-  children,
-  alertLable,
-}: {
-  children: ReactElement;
-  alertLable: AlertType;
-}) => {
-  return (
-    <div>
-      <p className="flex gap-1">
-        <CircleAlert />
-        {alertLable}
-      </p>
-      {children}
-    </div>
-  );
-};
-
 const CustomBlockquote = (props: ComponentPropsWithoutRef<"blockquote">) => {
   const children = props.children;
   const childrensChildren = (children as ReactElement[])[1].props.children;
