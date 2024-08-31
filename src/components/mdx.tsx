@@ -103,66 +103,75 @@ const CustomBlockquote = (props: ComponentPropsWithoutRef<"blockquote">) => {
   const children = props.children;
   const childrensChildren = (children as ReactElement[])[1].props.children;
   const alertStr = childrensChildren[0] as AlertType;
-  const alertContent = (childrensChildren as ReactNode[]).toSpliced(0, 2);
 
-  if (alertStr === "[!NOTE]") {
-    return (
-      <div className="border-l-4 px-2 border-l-blue-700">
-        <div className="flex gap-1 items-center">
-          <CircleAlert className="w-6 h-6" />
-          NOTE
-        </div>
-        {alertContent}
-      </div>
-    );
-  }
+  if (
+    alertStr === "[!NOTE]" ||
+    alertStr === "[!TIP]" ||
+    alertStr === "[!IMPORTANT]" ||
+    alertStr === "[!WARNING]" ||
+    alertStr === "[!CAUTION]"
+  ) {
+    const alertContent = (childrensChildren as ReactNode[]).slice(2);
 
-  if (alertStr === "[!TIP]") {
-    return (
-      <div className="border-l-4 px-2 border-l-green-700">
-        <div className="flex gap-1 items-center text-green-700">
-          <Lightbulb className="w-6 h-6" />
-          TIP
+    if (alertStr === "[!NOTE]") {
+      return (
+        <div className="border-l-4 px-2 border-l-blue-700">
+          <div className="flex gap-1 items-center">
+            <CircleAlert className="w-6 h-6" />
+            NOTE
+          </div>
+          {alertContent}
         </div>
-        {alertContent}
-      </div>
-    );
-  }
+      );
+    }
 
-  if (alertStr === "[!IMPORTANT]") {
-    return (
-      <div className="border-l-4 px-2 border-l-purple-700">
-        <div className="flex gap-1 items-center text-purple-700">
-          <MessageSquareWarning className="w-6 h-6" />
-          IMPORTANT
+    if (alertStr === "[!TIP]") {
+      return (
+        <div className="border-l-4 px-2 border-l-green-700">
+          <div className="flex gap-1 items-center text-green-700">
+            <Lightbulb className="w-6 h-6" />
+            TIP
+          </div>
+          {alertContent}
         </div>
-        {alertContent}
-      </div>
-    );
-  }
+      );
+    }
 
-  if (alertStr === "[!WARNING]") {
-    return (
-      <div className="border-l-4 px-2 border-l-yellow-500">
-        <div className="flex gap-1 items-center">
-          <MessageSquareWarning className="w-6 h-6" />
-          WARNING
+    if (alertStr === "[!IMPORTANT]") {
+      return (
+        <div className="border-l-4 px-2 border-l-purple-700">
+          <div className="flex gap-1 items-center text-purple-700">
+            <MessageSquareWarning className="w-6 h-6" />
+            IMPORTANT
+          </div>
+          {alertContent}
         </div>
-        {alertContent}
-      </div>
-    );
-  }
+      );
+    }
 
-  if (alertStr === "[!CAUTION]") {
-    return (
-      <div className="border-l-4 px-2 border-l-red-700">
-        <div className="flex gap-1 items-center text-red-700">
-          <OctagonAlert className="w-6 h-6" />
-          CAUTION
+    if (alertStr === "[!WARNING]") {
+      return (
+        <div className="border-l-4 px-2 border-l-yellow-500">
+          <div className="flex gap-1 items-center">
+            <MessageSquareWarning className="w-6 h-6" />
+            WARNING
+          </div>
+          {alertContent}
         </div>
-        {alertContent}
-      </div>
-    );
+      );
+    }
+
+    if (alertStr === "[!CAUTION]") {
+      return (
+        <div className="border-l-4 px-2 border-l-red-700">
+          <div className="flex gap-1 items-center text-red-700">
+            <OctagonAlert className="w-6 h-6" />
+            CAUTION
+          </div>
+          {alertContent}
+        </div>
+      );
+    }
   }
 
   return <blockquote>{children}</blockquote>;
